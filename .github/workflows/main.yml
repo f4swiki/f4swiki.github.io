@@ -1,4 +1,4 @@
-name: Mirror F4S Wiki
+name: Mirror Google Site to GitHub Pages
 
 on:
   push:               # ✅ runs whenever you push to this repo
@@ -12,47 +12,24 @@ permissions:
 jobs:
   mirror:
     runs-on: ubuntu-latest
-    env:
-      NEW_URL: "https://calloffreedom.github.io/f4swiki"
-      OLD_URL: "https://sites.google.com/view/f4swiki"
 
     steps:
-      - name: Checkout gh-pages branch
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          ref: gh-pages
+          ref: 'gh-pages'
 
-      - name: Install wget
-        run: sudo apt update && sudo apt install -y wget
+      - name: Install dependencies
+        run: sudo apt-get install -y python3-bs4 wget
 
-      - name: Mirror Google Site
+      - name: Fetch Google Site
         run: |
-          # ✅ keep .github folder intact, wipe everything else
-          find . -mindepth 1 ! -regex '^./\.git.*' ! -path './.github*' -exec rm -rf {} +
-          mkdir mirror
-          cd mirror
-          wget --mirror --convert-links --adjust-extension --page-requisites --no-parent https://sites.google.com/view/f4swiki
-          cd ..
+          rm -rf site
+          wget --mirror --convert-links --adjust-extension \
+            --page-requisites --no-parent \
+            https://sites.google.com/view/f4swiki -P site
 
-      - name: Prepare Pages branch
-        run: |
-          # Move mirrored files into repo root
-          mv mirror/sites.google.com/view/f4swiki/* .
-          touch .nojekyll
-          rm -rf mirror
-
-      - name: Strip only the 5th <script> block
-        run: |
-          find . -type f -name "*.html" | while read file; do
-            perl -0777 -pe '
-              my $count = 0;
-              s{
-                (<script\b[^>]*>.*?</script>)
-              }{
-                ++$count == 5 ? "" : $1
-              }gsex
-            ' "$file" > tmp && mv tmp "$file"
-          done
+      - name: Clean HTML (strip _at_config, rewrite URLs)
+        run: python3 cleanup.py
 
       - name: Commit and push updated site
         run: |
