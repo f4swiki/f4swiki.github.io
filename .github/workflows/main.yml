@@ -34,10 +34,11 @@ jobs:
           touch .nojekyll
           rm -rf mirror
 
-      - name: Strip Google Sites redirect
+      - name: Neutralize redirect logic
         run: |
-          find . -name "*.html" -exec sed -i '/window.location/d' {} \;
-          find . -name "*.html" -exec sed -i '/sites.google.com/d' {} \;
+          find . -name "*.js" -exec sed -i \
+            -e 's/window\.location\s*=\s*["'\'']https:\/\/sites\.google\.com\/view\/test-website["'\''];//g' \
+            -e 's/if\s*(window\.location\.hostname.*)//g' {} \;
 
       - name: Push to gh-pages branch
         run: |
