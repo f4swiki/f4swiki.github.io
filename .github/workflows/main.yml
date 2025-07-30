@@ -37,10 +37,24 @@ jobs:
           touch .nojekyll
           rm -rf mirror
 
-      - name: Strip ALL <script> blocks
+      - name: Strip only the 5th <script> block
         run: |
           find . -type f -name "*.html" | while read file; do
-            sed -i ':a;N;$!ba;s|<script[^>]*>.*</script>||g' "$file"
+            awk '
+              BEGIN { count=0 }
+              /<script[^>]*>/ {
+                count++
+              }
+              {
+                if (count==5 && inside==1) {
+                  # we are inside the 5th script: skip every line until </script>
+                  if (/<\/script>/) { inside=0 }
+                  next
+                }
+              }
+              count==5 && /<script[^>]*>/ { inside=1; next }
+              { print }
+            ' "$file" > tmp && mv tmp "$file"
           done
 
       - name: Push to gh-pages branch
