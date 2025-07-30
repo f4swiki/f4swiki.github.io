@@ -23,13 +23,17 @@ jobs:
 
       - name: Fetch Google Site
         run: |
-          rm -rf site
+          rm -rf *
+          wget https://raw.githubusercontent.com/calloffreedom/f4swiki/refs/heads/main/cleanup.py
           wget --mirror --convert-links --adjust-extension \
             --page-requisites --no-parent \
             https://sites.google.com/view/f4swiki -P site
 
       - name: Clean HTML (strip _at_config, rewrite URLs)
-        run: python3 cleanup.py
+        run: |
+          python3 cleanup.py
+          rm -rf cleanup.py
+          mv site/sites.google.com/view/f4swiki/* .
 
       - name: Commit and push updated site
         run: |
