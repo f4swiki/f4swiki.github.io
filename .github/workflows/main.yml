@@ -21,7 +21,7 @@ jobs:
 
       - name: Mirror Google Site
         run: |
-          rm -rf mirror
+          rm -rf *
           mkdir mirror
           cd mirror
           wget --mirror --convert-links --adjust-extension --page-requisites --no-parent https://sites.google.com/view/f4swiki
