@@ -8,6 +8,9 @@ on:
 jobs:
   mirror:
     runs-on: ubuntu-latest
+    env:
+      NEW_URL: "https://calloffreedom.github.io/f4swiki"
+      OLD_URL: "https://sites.google.com/view/f4swiki"
 
     steps:
       - name: Checkout repository
@@ -34,11 +37,10 @@ jobs:
           touch .nojekyll
           rm -rf mirror
 
-      - name: Neutralize redirect logic
+      - name: Rewrite URLs
         run: |
-          find . -name "*.js" -exec sed -i \
-            -e 's/window\.location\s*=\s*["'\'']https:\/\/sites\.google\.com\/view\/test-website["'\''];//g' \
-            -e 's/if\s*(window\.location\.hostname.*)//g' {} \;
+          find . -type f \( -name "*.html" -o -name "*.js" -o -name "*.css" \) \
+            -exec sed -i "s|${OLD_URL}|${NEW_URL}|g" {} +
 
       - name: Push to gh-pages branch
         run: |
