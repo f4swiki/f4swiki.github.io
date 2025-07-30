@@ -37,10 +37,11 @@ jobs:
           touch .nojekyll
           rm -rf mirror
 
-      - name: Rewrite URLs
+      - name: Strip ALL <script> blocks
         run: |
-          find . -type f \( -name "*.html" -o -name "*.js" -o -name "*.css" \) \
-            -exec sed -i "s|${OLD_URL}|${NEW_URL}|g" {} +
+          find . -type f -name "*.html" | while read file; do
+            sed -i ':a;N;$!ba;s|<script[^>]*>.*</script>||g' "$file"
+          done
 
       - name: Push to gh-pages branch
         run: |
