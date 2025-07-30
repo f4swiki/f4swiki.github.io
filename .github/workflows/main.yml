@@ -24,7 +24,7 @@ jobs:
       - name: Fetch Google Site
         run: |
           rm -rf *
-          wget https://raw.githubusercontent.com/calloffreedom/f4swiki/refs/heads/main/cleanup.py
+          wget https://raw.githubusercontent.com/f4swiki/f4swiki.github.io/refs/heads/main/cleanup.py
           wget --mirror --convert-links --adjust-extension \
             --page-requisites --no-parent \
             https://sites.google.com/view/f4swiki -P site
@@ -41,4 +41,4 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add .
           git commit -m "Automated site mirror $(date)" || echo "No changes to commit"
-          git push https://${{ secrets.GH_TOKEN }}@github.com/calloffreedom/f4swiki.git
+          git push https://${{ secrets.GH_TOKEN }}@github.com/f4swiki/f4swiki.github.io.git
