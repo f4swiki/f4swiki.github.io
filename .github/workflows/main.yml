@@ -40,7 +40,5 @@ jobs:
           git commit -m "Automated site mirror $(date)"
           
       - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GH_TOKEN }}
-          branch: gh-pages
+        run: |
+          git push https://${{ secrets.GH_TOKEN }}@github.com/calloffreedom/f4swiki.git
