@@ -8,14 +8,13 @@ nav_order: 7
 
 Totalitarian school networks are on the lookout for us. If our main website is blocked, try some of the mirrors!
 
-## Open Web Sites
-
-* [https://sites.google.com/view/extremelyhardalgebraproblems/](https://sites.google.com/view/extremelyhardalgebraproblems/)
-
-* [https://calloffreedom.github.io/f4swiki/home](https://calloffreedom.github.io/f4swiki/home)
+## Standard Site
 
 * [https://f4swiki.github.io/home](https://f4swiki.github.io/home)
 
+## Open Web Sites
+
+`* [https://calloffreedom.github.io/f4swiki/home](https://calloffreedom.github.io/f4swiki/home)
 
 ## Tor
 
